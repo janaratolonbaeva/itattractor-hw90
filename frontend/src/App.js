@@ -13,17 +13,27 @@ const App = () => {
     ws.current.onmessage = e => {
       const decoded = JSON.parse(e.data);
 
-      if (decoded.type === 'NEW_MESSAGE') {
-        setState(prev => [
-          ...prev,
-          {canvas: decoded.canvas}
-        ])
+      if (decoded.type === 'NEW_CANVAS') {
+
+        for (let item of decoded.canvas) {
+          const context = canvas.current.getContext('2d');
+          const imageData = context.createImageData(1, 1);
+          const d = imageData.data;
+
+          d[0] = 0;
+          d[1] = 0;
+          d[2] = 0;
+          d[3] = 255;
+
+          context.putImageData(imageData, item.x, item.y);
+        }
       }
     };
 
   }, []);
 
   const canvas = useRef(null);
+
 
   const canvasMouseMoveHandler = event => {
     if (state.mouseDown) {

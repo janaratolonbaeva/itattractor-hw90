@@ -16,7 +16,6 @@ app.ws('/canvas', function (ws, req) {
   activeConnections[id] = ws;
 
   ws.on('message', msg => {
-    console.log('Message received!', msg);
     const decoded = JSON.parse(msg)
 
     if (decoded.type === 'CREATE_CANVAS') {
